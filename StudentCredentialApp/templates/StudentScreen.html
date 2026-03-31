@@ -1,0 +1,578 @@
+{% load static %}
+<html>
+<head>
+<title>Educational Qualifications Management and Verification to Counter Forgery</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    /* Base styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        background-attachment: fixed;
+    }
+
+    #wrapper {
+        max-width: 100%;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Header styles */
+    #header {
+        background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%);
+        background-size: cover;
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+
+    #header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('{% static "images/pattern.png" %}');
+        opacity: 0.1;
+        z-index: 1;
+    }
+
+    #logo {
+        position: relative;
+        z-index: 2;
+    }
+
+    #logo h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: #ffffff;
+    }
+
+    .marquee-container {
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 10px 0;
+        border-radius: 50px;
+        margin-top: 15px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    marquee {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #FFC0CB;
+    }
+
+    /* Navigation styles */
+    #menu {
+        background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%);
+        padding: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    #menu ul {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0;
+    }
+
+    #menu li {
+        margin: 0;
+    }
+
+    #menu a {
+        display: flex;
+        align-items: center;
+        padding: 18px 25px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #menu a:last-child {
+        border-right: none;
+    }
+
+    #menu a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    #menu a:hover::before {
+        left: 100%;
+    }
+
+    #menu a:hover {
+        background: rgba(52, 152, 219, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Active menu item */
+    #menu a.active {
+        background: rgba(52, 152, 219, 0.5);
+        box-shadow: inset 0 -3px 0 #3498db;
+    }
+
+    #menu a.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid #3498db;
+    }
+
+    /* Menu icons */
+    .menu-icon {
+        margin-right: 8px;
+        font-size: 1.1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    /* Main content styles */
+    #page {
+        padding: 40px 20px;
+        background: url('{% static "images/login-bg.jpg" %}') no-repeat center center;
+        background-size: cover;
+        position: relative;
+        min-height: calc(100vh - 200px);
+    }
+
+    #page::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(249, 251, 252, 0.9);
+        z-index: 1;
+    }
+
+    #content {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .post {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: translateY(0);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .post:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .title h2 {
+        font-size: 2rem;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-weight: 700;
+        position: relative;
+        display: inline-block;
+    }
+
+    .title h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 4px;
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        border-radius: 2px;
+    }
+
+    .entry {
+        text-align: center;
+    }
+
+    .message-box {
+        background: linear-gradient(135deg, #3498db, #2c3e50);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+        margin: 40px 0;
+    }
+
+    .image-container {
+        text-align: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .image-container img:hover {
+        transform: scale(1.05);
+    }
+
+    .text-content {
+        text-align: left;
+        padding: 20px;
+    }
+
+    .text-content h3 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .text-content p {
+        color: #34495e;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    .features-list li {
+        padding: 10px 0;
+        color: #2c3e50;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .features-list li::before {
+        content: '✓';
+        color: #27ae60;
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    /* Blockchain badge */
+    .blockchain-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #f39c12, #e67e22);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 10px 0;
+        box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    }
+
+    /* Abstract section styling */
+    .abstract-section {
+        background: linear-gradient(135deg, #e8f4fc, #d6eaf8);
+        border-left: 4px solid #3498db;
+        padding: 25px;
+        border-radius: 10px;
+        margin: 25px 0;
+        text-align: left;
+    }
+
+    .abstract-title {
+        color: #2c3e50;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+    .abstract-title::before {
+        content: '📄';
+        margin-right: 10px;
+        font-size: 1.5rem;
+    }
+
+    .abstract-text {
+        color: #34495e;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        text-align: justify;
+    }
+
+    /* Table container for data */
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin: 30px 0;
+        border-radius: 15px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        position: relative;
+    }
+
+    .table-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #3498db;
+        border-radius: 15px 15px 0 0;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        #header {
+            padding: 25px 15px;
+        }
+
+        #logo h1 {
+            font-size: 1.8rem;
+        }
+
+        #menu ul {
+            flex-direction: column;
+        }
+
+        #menu a {
+            padding: 15px;
+            text-align: center;
+            justify-content: center;
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #menu a:last-child {
+            border-bottom: none;
+        }
+
+        .post {
+            padding: 30px 25px;
+        }
+
+        .title h2 {
+            font-size: 1.7rem;
+        }
+
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .text-content {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .abstract-section {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .post {
+            padding: 25px 20px;
+        }
+
+        .title h2 {
+            font-size: 1.5rem;
+        }
+
+        .text-content h3 {
+            font-size: 1.5rem;
+        }
+
+        .text-content p {
+            font-size: 1rem;
+        }
+
+        .abstract-text {
+            font-size: 0.95rem;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .post {
+        animation: fadeInUp 0.6s ease-out;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add active class to current page menu item
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll('#menu a');
+        
+        menuLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div id="logo">
+                <h1>Educational Qualifications Management and Verification to Counter Forgery</h1>
+                <div class="marquee-container">
+                    <marquee>Credential Verification for Hiring Processes</marquee>
+                </div>
+            </div>
+        </div>
+
+        <div id="menu">
+            <ul>
+                <li><a href="{% url 'ViewDetails' %}">
+                    <span class="menu-icon">👤</span>
+                    View Your Details
+                </a></li>
+                <li><a href="{% url 'AccessOwnCertificate' %}">
+                    <span class="menu-icon">📜</span>
+                    Access Your Certificates
+                </a></li>
+                <li><a href="{% url 'GrantAccess' %}">
+                    <span class="menu-icon">🔐</span>
+                    View Access Request
+                </a></li>
+                <li><a href="/">
+                    <span class="menu-icon">🚪</span>
+                    Logout
+                </a></li>
+            </ul>
+        </div>
+
+        <div id="page">
+            <div id="content">
+                <div class="post">
+                    <div class="title">
+                        <h2>Secure Sharing of Student's Credentials</h2>
+                    </div>
+                    <div class="entry">
+                        {% if data %}
+                        <div class="message-box">
+                            {{ data|safe }}
+                        </div>
+                        {% endif %}
+
+                        <div class="content-grid">
+                            <div class="image-container">
+                                <img src="{% static 'images/images.jpg' %}" alt="Blockchain Credential Verification" />
+                                <div class="blockchain-badge">
+                                    Powered by Blockchain Technology
+                                </div>
+                            </div>
+                            
+                            <div class="text-content">
+                                <h3>About Student's Credentials</h3>
+                                
+                                <div class="abstract-section">
+                                    <div class="abstract-title">Abstract</div>
+                                    <p class="abstract-text">
+                                        The paper aims to resolve security issues revolving around the sharing of student's credentials by leveraging the blockchain technology. It proposes a novel blockchain-based architecture followed by its implementation as a decentralized application (DApp). Further, the cost & the performance analysis are carried out based on the experiments conducted.
+                                    </p>
+                                </div>
+                                
+                                <ul class="features-list">
+                                    <li>Secure credential sharing with encryption</li>
+                                    <li>Tamper-proof certificate storage</li>
+                                    <li>Instant verification process</li>
+                                    <li>Decentralized and transparent system</li>
+                                    <li>Privacy-protected access control</li>
+                                    <li>Anti-forgery measures</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

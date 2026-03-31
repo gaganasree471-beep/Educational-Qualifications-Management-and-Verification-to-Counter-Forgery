@@ -1,0 +1,668 @@
+{% load static %}
+<html>
+
+<head>
+	<title>Educational Qualifications Management and Verification to Counter Forgery</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<style>
+		/* Base styles */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			line-height: 1.6;
+			color: #333;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			background-attachment: fixed;
+		}
+
+		#wrapper {
+			max-width: 100%;
+			margin: 0 auto;
+			background: rgba(255, 255, 255, 0.95);
+			backdrop-filter: blur(10px);
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+			min-height: 100vh;
+			overflow: hidden;
+		}
+
+		/* Header styles */
+		#header {
+			background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%),
+			url('{% static "images/header-bg.jpg" %}') no-repeat center center;
+			background-size: cover;
+			color: white;
+			padding: 40px 30px;
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+			clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+		}
+
+		#header::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: url('{% static "images/pattern.png" %}');
+			opacity: 0.1;
+			z-index: 1;
+		}
+
+		#logo {
+			position: relative;
+			z-index: 2;
+		}
+
+		#logo h1 {
+			font-size: 2.8rem;
+			margin-bottom: 20px;
+			text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+			font-weight: 700;
+			letter-spacing: -0.5px;
+			color: #fffffe;
+		}
+
+		.marquee-container {
+			overflow: hidden;
+			background: rgba(255, 255, 255, 0.15);
+			padding: 12px 0;
+			border-radius: 50px;
+			margin-top: 20px;
+			backdrop-filter: blur(5px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		marquee {
+			font-size: 1.3rem;
+			font-weight: 500;
+			color: #FFC0CB;
+		}
+
+		/* Navigation styles */
+		#menu {
+			background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%);
+			padding: 0;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		#menu ul {
+			display: flex;
+			justify-content: center;
+			list-style: none;
+			flex-wrap: wrap;
+			margin: 0;
+			padding: 0;
+		}
+
+		#menu li {
+			margin: 0;
+		}
+
+		#menu a {
+			display: flex;
+			align-items: center;
+			padding: 20px 30px;
+			color: white;
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 1.1rem;
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+		}
+
+		#menu a::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+			transition: left 0.5s;
+		}
+
+		#menu a:hover::before {
+			left: 100%;
+		}
+
+		#menu a:hover {
+			background: rgba(255, 255, 255, 0.1);
+			transform: translateY(-2px);
+		}
+
+		/* Active menu item */
+		#menu a.active {
+			background: rgba(255, 255, 255, 0.2);
+			box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.8);
+		}
+
+		#menu a.active::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 0;
+			height: 0;
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			border-bottom: 8px solid white;
+		}
+
+		/* Menu icons */
+		.menu-icon {
+			margin-right: 10px;
+			font-size: 1.3rem;
+			width: 24px;
+			text-align: center;
+		}
+
+		/* Signup section styles */
+		.entry {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: calc(100vh - 300px);
+			padding: 40px 20px;
+			background: url('{% static "images/login-bg.jpg" %}') no-repeat center center;
+			background-size: cover;
+			position: relative;
+		}
+
+		.entry::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(249, 251, 252, 0.85);
+			z-index: 1;
+		}
+
+		.signup-container {
+			position: relative;
+			z-index: 2;
+			background: rgba(255, 255, 255, 0.95);
+			border-radius: 20px;
+			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+			padding: 50px 40px;
+			width: 100%;
+			max-width: 600px;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			transform: translateY(0);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+
+		.signup-container:hover {
+			transform: translateY(-10px);
+			box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+		}
+
+		.signup-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+		.signup-title {
+			font-size: 2.2rem;
+			color: #2c3e50;
+			margin-bottom: 15px;
+			font-weight: 700;
+			position: relative;
+			display: inline-block;
+		}
+
+		.signup-title::after {
+			content: '';
+			position: absolute;
+			bottom: -10px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 80px;
+			height: 4px;
+			background: linear-gradient(135deg, #e74c3c, #c0392b);
+			border-radius: 2px;
+		}
+
+		.signup-subtitle {
+			font-size: 1.1rem;
+			color: #7f8c8d;
+			margin-top: 20px;
+		}
+
+		.message {
+			text-align: center;
+			margin-bottom: 25px;
+			padding: 15px;
+			border-radius: 10px;
+			background: rgba(231, 76, 60, 0.1);
+			border-left: 4px solid #e74c3c;
+			color: #2c3e50;
+			font-weight: 500;
+		}
+
+		/* Form styles */
+		form {
+			width: 100%;
+		}
+
+		.form-group {
+			margin-bottom: 25px;
+			position: relative;
+		}
+
+		.form-label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: #2c3e50;
+			font-size: 1rem;
+			display: flex;
+			align-items: center;
+		}
+
+		.form-label-icon {
+			margin-right: 8px;
+			font-size: 1.1rem;
+			width: 20px;
+			text-align: center;
+		}
+
+		.input-with-icon {
+			position: relative;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 15px 20px 15px 50px;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+		}
+
+		.form-control:focus {
+			outline: none;
+			border-color: #e74c3c;
+			background: white;
+			box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+		}
+
+		.input-icon {
+			position: absolute;
+			left: 18px;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1.2rem;
+			color: #7f8c8d;
+			z-index: 2;
+		}
+
+		.submit-btn {
+			width: 100%;
+			padding: 16px;
+			background:  #3498db;
+			color: white;
+			border: none;
+			border-radius: 10px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+			margin-top: 10px;
+			position: relative;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.submit-btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+			transition: left 0.5s;
+		}
+
+		.submit-btn:hover::before {
+			left: 100%;
+		}
+
+		.submit-btn:hover {
+			background: linear-gradient(135deg, #27ae60, #2ecc71);
+			transform: translateY(-3px);
+			box-shadow: 0 8px 20px rgba(46, 204, 113, 0.6);
+		}
+
+		.submit-btn:active {
+			transform: translateY(0);
+		}
+
+		.btn-icon {
+			margin-right: 8px;
+			font-size: 1.2rem;
+		}
+
+		.login-link {
+			text-align: center;
+			margin-top: 25px;
+			padding-top: 20px;
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.login-link a {
+			color: #3498db;
+			text-decoration: none;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			display: inline-flex;
+			align-items: center;
+		}
+
+		.login-link a:hover {
+			color: #c0392b;
+			transform: translateX(5px);
+		}
+
+		.login-link a::after {
+			content: '→';
+			margin-left: 5px;
+			transition: transform 0.3s ease;
+		}
+
+		.login-link a:hover::after {
+			transform: translateX(5px);
+		}
+
+		/* Company icon */
+		.company-icon {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.icon-container {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 100px;
+			height: 100px;
+			background: #3498db;
+			border-radius: 50%;
+			box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+		}
+
+		.icon-container span {
+			font-size: 3rem;
+			color: white;
+		}
+
+		/* Responsive styles */
+		@media (max-width: 768px) {
+			#header {
+				padding: 30px 15px;
+			}
+
+			#logo h1 {
+				font-size: 1.8rem;
+			}
+
+			#menu ul {
+				flex-direction: column;
+			}
+
+			#menu a {
+				padding: 15px;
+				text-align: center;
+				justify-content: center;
+			}
+
+			.menu-icon {
+				margin-right: 8px;
+			}
+
+			.signup-container {
+				padding: 40px 25px;
+			}
+
+			.signup-title {
+				font-size: 1.8rem;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.signup-container {
+				padding: 30px 20px;
+			}
+
+			.signup-title {
+				font-size: 1.6rem;
+			}
+
+			.icon-container {
+				width: 80px;
+				height: 80px;
+			}
+
+			.icon-container span {
+				font-size: 2.5rem;
+			}
+
+			.form-control {
+				padding: 15px 15px 15px 45px;
+			}
+
+			.input-icon {
+				left: 15px;
+			}
+		}
+	</style>
+	<script LANGUAGE="Javascript">
+		function validate() {
+			var x = document.forms["f1"]["t1"].value;
+			var y = document.forms["f1"]["t2"].value;
+			var a = document.forms["f1"]["t3"].value;
+			var b = document.forms["f1"]["t4"].value;
+			var c = document.forms["f1"]["t5"].value;
+			if (x == null || x == "") {
+				window.alert("Company name must be enter");
+				document.f1.t1.focus();
+				return false;
+			}
+			if (y == null || y == "") {
+				window.alert("Company address must be entered");
+				document.f1.t2.focus();
+				return false;
+			}
+			if (a == null || a == "") {
+				window.alert("Company contact no must be entered");
+				document.f1.t3.focus();
+				return false;
+			}
+			if (isNaN(a)) {
+				alert("Contact no  must be numeric");
+				document.f1.t3.focus();
+				return false;
+			}
+			if (a.length != 10) {
+				alert("Contact number must be 10 digits long");
+				document.f1.t3.focus();
+				return false;
+			}
+			if (b == null || b == "") {
+				window.alert("Username must be entered");
+				document.f1.t4.focus();
+				return false;
+			}
+			if (c == null || c == "") {
+				window.alert("Password must be entered");
+				document.f1.t5.focus();
+				return false;
+			}
+			return true;
+		}
+
+		// Set active menu item based on current page
+		document.addEventListener('DOMContentLoaded', function () {
+			const currentPage = window.location.pathname;
+			const menuLinks = document.querySelectorAll('#menu a');
+
+			menuLinks.forEach(link => {
+				if (link.getAttribute('href') === '{% url "CompanyLogin" %}') {
+					link.classList.add('active');
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<div id="logo">
+				<h1>Educational Qualifications Management and Verification to Counter Forgery</h1>
+				<div class="marquee-container">
+					<marquee>Credential Verification for Hiring Processes</marquee>
+				</div>
+			</div>
+		</div>
+
+		<div id="menu">
+			<ul>
+				<li><a href="/">
+						<span class="menu-icon">🏠</span>
+						Home
+					</a></li>
+				<li><a href="{% url 'UniversityLogin' %}">
+						<span class="menu-icon">🎓</span>
+						University Login
+					</a></li>
+				<li><a href="{% url 'CompanyLogin' %}" class="active">
+						<span class="menu-icon">💼</span>
+						Company Login
+					</a></li>
+				<li><a href="{% url 'StudentLogin' %}">
+						<span class="menu-icon">👨‍🎓</span>
+						Student Login
+					</a></li>
+			</ul>
+		</div>
+
+		<div class="entry">
+			<div class="signup-container">
+				<div class="company-icon">
+					<div class="icon-container">
+						<span>🏢</span>
+					</div>
+				</div>
+
+				<div class="signup-header">
+					<h2 class="signup-title">Company Signup</h2>
+					<p class="signup-subtitle">Create your company account to join our verification platform</p>
+				</div>
+
+				{% if data %}
+				<div class="message">
+					{{ data }}
+				</div>
+				{% endif %}
+
+				<form name="f1" method="post" action="{% url 'CompanySignupAction' %}" OnSubmit="return validate()">
+					{% csrf_token %}
+
+					<div class="form-group">
+						<label class="form-label" for="t1">
+							<span class="form-label-icon">🏢</span>
+							Company Name
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">🏢</span>
+							<input type="text" id="t1" name="t1" class="form-control" placeholder="Enter company name">
+						</div>
+						<div id='nameid'></div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t2">
+							<span class="form-label-icon">📍</span>
+							Address
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">📍</span>
+							<input type="text" id="t2" name="t2" class="form-control"
+								placeholder="Enter company address">
+						</div>
+						<div id='nameid'></div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t3">
+							<span class="form-label-icon">📞</span>
+							Contact No
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">📞</span>
+							<input type="text" id="t3" name="t3" class="form-control"
+								placeholder="Enter 10-digit contact number">
+						</div>
+						<div id='nameid'></div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t4">
+							<span class="form-label-icon">👤</span>
+							Username
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">👤</span>
+							<input type="text" id="t4" name="t4" class="form-control" placeholder="Choose a username">
+						</div>
+						<div id='nameid'></div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t5">
+							<span class="form-label-icon">🔒</span>
+							Password
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">🔒</span>
+							<input type="password" id="t5" name="t5" class="form-control"
+								placeholder="Create a secure password">
+						</div>
+					</div>
+
+					<button type="submit" class="submit-btn">
+						<span class="btn-icon">✍️</span>
+						Create Company Account
+					</button>
+
+					<div class="login-link">
+						<a href="{% url 'CompanyLogin' %}">Already have an account? Login Here</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

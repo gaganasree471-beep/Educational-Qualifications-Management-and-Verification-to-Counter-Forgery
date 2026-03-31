@@ -1,0 +1,771 @@
+{% load static %}
+<html>
+
+<head>
+	<title>Educational Qualifications Management and Verification to Counter Forgery</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script language="javascript" type="text/javascript" src="{% static 'datetimepicker.js' %}"></script>
+	<style>
+		/* Base styles */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			line-height: 1.6;
+			color: #333;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			background-attachment: fixed;
+		}
+
+		#wrapper {
+			max-width: 100%;
+			margin: 0 auto;
+			background: rgba(255, 255, 255, 0.98);
+			backdrop-filter: blur(10px);
+			box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+			min-height: 100vh;
+			overflow: hidden;
+		}
+
+		/* Header styles */
+		#header {
+			background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%),
+			url('{% static "images/header-bg.jpg" %}') no-repeat center center;
+			background-size: cover;
+			color: white;
+			padding: 30px 20px;
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+			clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+		}
+
+		#header::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: url('{% static "images/pattern.png" %}');
+			opacity: 0.1;
+			z-index: 1;
+		}
+
+		#logo {
+			position: relative;
+			z-index: 2;
+		}
+
+		#logo h1 {
+			font-size: 2.2rem;
+			margin-bottom: 15px;
+			text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+			font-weight: 700;
+			letter-spacing: -0.5px;
+			color: #fffffe;
+		}
+
+		.marquee-container {
+			overflow: hidden;
+			background: rgba(255, 255, 255, 0.15);
+			padding: 10px 0;
+			border-radius: 50px;
+			margin-top: 15px;
+			backdrop-filter: blur(5px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			max-width: 600px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		marquee {
+			font-size: 1.1rem;
+			font-weight: 500;
+			color: #FFC0CB;
+		}
+
+		/* Navigation styles */
+		#menu {
+			background: linear-gradient(90deg, rgba(54, 48, 176, 1) 28%, rgba(9, 9, 121, 1) 41%, rgba(0, 212, 255, 1) 100%);
+			padding: 0;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+
+		#menu ul {
+			display: flex;
+			justify-content: center;
+			list-style: none;
+			flex-wrap: wrap;
+			margin: 0;
+			padding: 0;
+		}
+
+		#menu li {
+			margin: 0;
+		}
+
+		#menu a {
+			display: flex;
+			align-items: center;
+			padding: 18px 25px;
+			color: white;
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+			border-right: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		#menu a:last-child {
+			border-right: none;
+		}
+
+		#menu a::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+			transition: left 0.5s;
+		}
+
+		#menu a:hover::before {
+			left: 100%;
+		}
+
+		#menu a:hover {
+			background: rgba(52, 152, 219, 0.3);
+			transform: translateY(-2px);
+		}
+
+		/* Active menu item */
+		#menu a.active {
+			background: rgba(52, 152, 219, 0.5);
+			box-shadow: inset 0 -3px 0 #3498db;
+		}
+
+		#menu a.active::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 0;
+			height: 0;
+			border-left: 6px solid transparent;
+			border-right: 6px solid transparent;
+			border-bottom: 6px solid #3498db;
+		}
+
+		/* Menu icons */
+		.menu-icon {
+			margin-right: 8px;
+			font-size: 1.1rem;
+			width: 20px;
+			text-align: center;
+		}
+
+		/* Main content styles */
+		.entry {
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			min-height: calc(100vh - 200px);
+			padding: 40px 20px;
+			background: url('{% static "images/login-bg.jpg" %}') no-repeat center center;
+			background-size: cover;
+			position: relative;
+		}
+
+		.entry::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(249, 251, 252, 0.9);
+			z-index: 1;
+		}
+
+		.form-container {
+			position: relative;
+			z-index: 2;
+			background: rgba(255, 255, 255, 0.95);
+			border-radius: 20px;
+			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+			padding: 40px;
+			width: 100%;
+			max-width: 600px;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			transform: translateY(0);
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+
+		.form-container:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+		}
+
+		.form-header {
+			text-align: center;
+			margin-bottom: 35px;
+		}
+
+		.form-title {
+			font-size: 2rem;
+			color: #2c3e50;
+			margin-bottom: 12px;
+			font-weight: 700;
+			position: relative;
+			display: inline-block;
+		}
+
+		.form-title::after {
+			content: '';
+			position: absolute;
+			bottom: -8px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 70px;
+			height: 4px;
+			background: linear-gradient(135deg, #f39c12, #e67e22);
+			border-radius: 2px;
+		}
+
+		.form-subtitle {
+			font-size: 1rem;
+			color: #7f8c8d;
+			margin-top: 15px;
+		}
+
+		.message {
+			text-align: center;
+			margin-bottom: 25px;
+			padding: 15px;
+			border-radius: 10px;
+			background: rgba(243, 156, 18, 0.1);
+			border-left: 4px solid #f39c12;
+			color: #2c3e50;
+			font-weight: 500;
+		}
+
+		/* Form styles */
+		form {
+			width: 100%;
+		}
+
+		.form-group {
+			margin-bottom: 25px;
+			position: relative;
+		}
+
+		.form-label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: 600;
+			color: #2c3e50;
+			font-size: 0.95rem;
+			display: flex;
+			align-items: center;
+		}
+
+		.form-label-icon {
+			margin-right: 8px;
+			font-size: 1rem;
+			width: 18px;
+			text-align: center;
+		}
+
+		.input-with-icon {
+			position: relative;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 14px 18px 14px 45px;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.form-control:focus {
+			outline: none;
+			border-color: #f39c12;
+			background: white;
+			box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+		}
+
+		.input-icon {
+			position: absolute;
+			left: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1.1rem;
+			color: #7f8c8d;
+			z-index: 2;
+		}
+
+		/* Date picker styles */
+		.date-picker-container {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.date-input {
+			flex: 1;
+			padding: 14px 18px;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.date-input:focus {
+			outline: none;
+			border-color: #f39c12;
+			background: white;
+			box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+		}
+
+		.calendar-btn {
+			background:  #3498db;
+			border: none;
+			border-radius: 8px;
+			padding: 12px 14px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.calendar-btn:hover {
+			background: #e67e22;
+			transform: translateY(-2px);
+		}
+
+		.calendar-btn img {
+			width: 16px;
+			height: 16px;
+			filter: brightness(0) invert(1);
+		}
+
+		/* File upload styles */
+		.file-upload-container {
+			position: relative;
+		}
+
+		.file-input {
+			width: 100%;
+			padding: 14px 18px;
+			border: 2px dashed #e0e0e0;
+			border-radius: 10px;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+			background: #f8f9fa;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			cursor: pointer;
+		}
+
+		.file-input:hover {
+			border-color: #f39c12;
+			background: #fef9e7;
+		}
+
+		.file-input:focus {
+			outline: none;
+			border-color: #f39c12;
+			background: white;
+			box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+		}
+
+		.file-hint {
+			font-size: 0.85rem;
+			color: #7f8c8d;
+			margin-top: 5px;
+			display: block;
+		}
+
+		.submit-btn {
+			width: 100%;
+			padding: 16px;
+			background:  #3498db;
+			color: white;
+			border: none;
+			border-radius: 10px;
+			font-size: 1.1rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+			margin-top: 15px;
+			position: relative;
+			overflow: hidden;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.submit-btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+			transition: left 0.5s;
+		}
+
+		.submit-btn:hover::before {
+			left: 100%;
+		}
+
+		.submit-btn:hover {
+			background: linear-gradient(135deg, #e67e22, #f39c12);
+			transform: translateY(-3px);
+			box-shadow: 0 8px 20px rgba(243, 156, 18, 0.6);
+		}
+
+		.submit-btn:active {
+			transform: translateY(0);
+		}
+
+		.btn-icon {
+			margin-right: 8px;
+			font-size: 1.2rem;
+		}
+
+		/* Update icon */
+		.update-icon {
+			text-align: center;
+			margin-bottom: 25px;
+		}
+
+		.icon-container {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 80px;
+			height: 80px;
+			background:  #3498db;
+			border-radius: 50%;
+			box-shadow: 0 8px 16px rgba(243, 156, 18, 0.3);
+		}
+
+		.icon-container span {
+			font-size: 2.5rem;
+			color: white;
+		}
+
+		/* Info box */
+		.info-box {
+			background: linear-gradient(135deg, #fef9e7, #fdebd0);
+			border-left: 4px solid #f39c12;
+			padding: 20px;
+			border-radius: 10px;
+			margin-top: 25px;
+		}
+
+		.info-box h4 {
+			color: #e67e22;
+			margin-bottom: 10px;
+			font-size: 1.1rem;
+		}
+
+		.info-box p {
+			color: #7d6608;
+			font-size: 0.9rem;
+			margin: 0;
+			line-height: 1.5;
+		}
+
+		/* Responsive styles */
+		@media (max-width: 768px) {
+			#header {
+				padding: 25px 15px;
+			}
+
+			#logo h1 {
+				font-size: 1.8rem;
+			}
+
+			#menu ul {
+				flex-direction: column;
+			}
+
+			#menu a {
+				padding: 15px;
+				text-align: center;
+				justify-content: center;
+				border-right: none;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			#menu a:last-child {
+				border-bottom: none;
+			}
+
+			.menu-icon {
+				margin-right: 8px;
+			}
+
+			.form-container {
+				padding: 30px 25px;
+			}
+
+			.form-title {
+				font-size: 1.7rem;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.form-container {
+				padding: 25px 20px;
+			}
+
+			.form-title {
+				font-size: 1.5rem;
+			}
+
+			.icon-container {
+				width: 70px;
+				height: 70px;
+			}
+
+			.icon-container span {
+				font-size: 2rem;
+			}
+
+			.form-control {
+				padding: 12px 15px 12px 40px;
+			}
+
+			.input-icon {
+				left: 14px;
+			}
+
+			.date-input {
+				padding: 12px 15px;
+			}
+
+			.calendar-btn {
+				padding: 10px 12px;
+			}
+
+			.file-input {
+				padding: 12px 15px;
+			}
+		}
+	</style>
+	<script LANGUAGE="Javascript">
+		function validate() {
+			var cert = document.forms["f1"]["certificate"].value;
+			var x = document.forms["f1"]["t1"].value;
+			var y = document.forms["f1"]["t2"].value;
+			var a = document.forms["f1"]["t3"].value;
+			var b = document.forms["f1"]["t4"].value;
+
+			if (cert == null || cert == "") {
+				window.alert("Certificate ID must be enter");
+				document.f1.certificate.focus();
+				return false;
+			}
+
+			if (x == null || x == "") {
+				window.alert("Student ID must be enter");
+				document.f1.t1.focus();
+				return false;
+			}
+			if (y == null || y == "") {
+				window.alert("Certificate details must be entered");
+				document.f1.t2.focus();
+				return false;
+			}
+			if (a == null || a == "") {
+				window.alert("Issue date must be entered");
+				document.f1.t3.focus();
+				return false;
+			}
+
+			if (b == null || b == "") {
+				window.alert("Certificate image must be uploaded");
+				document.f1.t4.focus();
+				return false;
+			}
+
+			return true;
+		}
+
+		// Set active menu item based on current page
+		document.addEventListener('DOMContentLoaded', function () {
+			const currentPage = window.location.pathname;
+			const menuLinks = document.querySelectorAll('#menu a');
+
+			menuLinks.forEach(link => {
+				if (link.getAttribute('href') === '{% url "UpdateCertificate" %}') {
+					link.classList.add('active');
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<div id="logo">
+				<h1>Educational Qualifications Management and Verification to Counter Forgery</h1>
+				<div class="marquee-container">
+					<marquee>Credential Verification for Hiring Processes</marquee>
+				</div>
+			</div>
+		</div>
+
+		<div id="menu">
+			<ul>
+				<li><a href="{% url 'EnrollStudent' %}">
+						<span class="menu-icon">📝</span>
+						Enroll Students
+					</a></li>
+				<li><a href="{% url 'UploadCertificate' %}">
+						<span class="menu-icon">📄</span>
+						Upload Certificate
+					</a></li>
+				<li><a href="{% url 'UpdateCertificate' %}" class="active">
+						<span class="menu-icon">✏️</span>
+						Update Certificate
+					</a></li>
+				<li><a href="{% url 'ViewStudents' %}">
+						<span class="menu-icon">👥</span>
+						View Students
+					</a></li>
+				<li><a href="/">
+						<span class="menu-icon">🚪</span>
+						Logout
+					</a></li>
+			</ul>
+		</div>
+
+		<div class="entry">
+			<div class="form-container">
+				<div class="update-icon">
+					<div class="icon-container">
+						<span>🔄</span>
+					</div>
+				</div>
+
+				<div class="form-header">
+					<h2 class="form-title">Update Certificate</h2>
+					<p class="form-subtitle">Modify existing certificate information</p>
+				</div>
+
+				{% if data %}
+				<div class="message">
+					{{ data }}
+				</div>
+				{% endif %}
+
+				<form name="f1" method="post" action="{% url 'UpdateCertificateAction' %}" enctype="multipart/form-data"
+					OnSubmit="return validate()">
+					{% csrf_token %}
+
+					<div class="form-group">
+						<label class="form-label" for="certificate">
+							<span class="form-label-icon">🆔</span>
+							Certificate ID
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">🆔</span>
+							<input type="text" id="certificate" name="certificate" class="form-control"
+								placeholder="Enter certificate ID">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t1">
+							<span class="form-label-icon">🎫</span>
+							Student ID
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">🎫</span>
+							<input type="text" id="t1" name="t1" class="form-control" placeholder="Enter student ID">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t2">
+							<span class="form-label-icon">📋</span>
+							Certificate Details
+						</label>
+						<div class="input-with-icon">
+							<span class="input-icon">📋</span>
+							<input type="text" id="t2" name="t2" class="form-control"
+								placeholder="Enter certificate details">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="demo">
+							<span class="form-label-icon">📅</span>
+							Issue Date
+						</label>
+						<div class="date-picker-container">
+							<input name="t3" type="Text" id="demo" maxlength="25" class="date-input"
+								placeholder="Select issue date">
+							<a href="javascript:NewCal('demo','ddmmmyyyy',false,24)" class="calendar-btn">
+								<img src="{% static 'cal.gif' %}" alt="Pick a date">
+							</a>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="form-label" for="t4">
+							<span class="form-label-icon">🖼️</span>
+							Update Certificate File
+						</label>
+						<div class="file-upload-container">
+							<input type="file" id="t4" name="t4" class="file-input" accept="image/*,.pdf,.doc,.docx">
+							<span class="file-hint">Supported formats: JPG, PNG, PDF, DOC (Max: 10MB)</span>
+						</div>
+					</div>
+
+					<button type="submit" class="submit-btn">
+						<span class="btn-icon">💾</span>
+						Update Certificate
+					</button>
+
+					<div class="info-box">
+						<h4>💡 Update Information</h4>
+						<p>This form allows you to update existing certificate records. Make sure to provide the correct
+							Certificate ID and upload the updated certificate file if needed.</p>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
